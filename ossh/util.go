@@ -1,4 +1,4 @@
-package main
+package ossh
 
 import (
 	"crypto/x509"
