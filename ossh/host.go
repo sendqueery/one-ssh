@@ -45,6 +45,7 @@ type OsshHost struct {
 	sshc           *ssh.Client
 	connectTimeout time.Duration
 	runTimeout     time.Duration
+	useColor       bool
 }
 
 func (host *OsshHost) setLabel(showip bool) error {

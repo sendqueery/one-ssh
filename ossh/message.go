@@ -4,7 +4,6 @@ import (
 	"fmt"
 )
 
-var useColor bool
 var verbose *bool
 
 //
@@ -45,7 +44,7 @@ func (m *OsshMessage) println() {
 	if m.messageType == ERROR {
 		out = m.host.err.Error()
 	}
-	if useColor {
+	if m.host.useColor {
 		fmt.Printf("\033[%dm%s\033[0m %s\n", hostColor[m.messageType], m.host.label, out)
 	} else {
 		fmt.Printf("%s %s %s\n", m.host.label, hostSuffix[m.messageType], out)

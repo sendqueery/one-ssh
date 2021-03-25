@@ -14,6 +14,7 @@ import (
 	"github.com/pborman/getopt/v2"
 	"golang.org/x/crypto/ssh"
 	"golang.org/x/crypto/ssh/agent"
+	"golang.org/x/term"
 )
 
 // we need to define new type because by default getopt will split
@@ -205,9 +206,12 @@ func (s *OsshSettings) getHosts() ([]OsshHost, error) {
 	if err != nil {
 		return nil, err
 	}
+
+	useColor := term.IsTerminal(int(os.Stdout.Fd()))
 	// add space padding to the labels for better output formatting
 	for i := 0; i < len(hosts); i++ {
-		hosts[i].label = hosts[i].label + strings.Repeat(" ", *s.maxLabelLength-len(hosts[i].label))
+		hosts[i].label = hosts[i].label + strings.Repeat(" ", *s.MaxLabelLength-len(hosts[i].label))
+		hosts[i].useColor = useColor
 	}
 	return hosts, nil
 }
