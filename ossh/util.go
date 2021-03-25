@@ -1,21 +1,19 @@
 package ossh
 
 import (
-	"crypto/x509"
 	"encoding/pem"
 	"errors"
 	"fmt"
 	"io/ioutil"
-	"os"
 	"syscall"
 
 	"golang.org/x/crypto/ssh"
-	"golang.org/x/crypto/ssh/terminal"
+	"golang.org/x/term"
 )
 
 func readBytePasswordFromTerminal(prompt string) []byte {
 	fmt.Printf("%s ", prompt)
-	bytePassword, _ := terminal.ReadPassword(int(syscall.Stdin))
+	bytePassword, _ := term.ReadPassword(int(syscall.Stdin))
 	fmt.Printf("\n")
 	return bytePassword
 }
@@ -42,9 +40,5 @@ func publicKeyFile(file string) (ssh.AuthMethod, error) {
 		return nil, err
 	}
 
-func abortOnError(err error) {
-	if err != nil {
-		fmt.Println(err)
-		os.Exit(1)
-	}
+	return ssh.PublicKeys(key), nil
 }

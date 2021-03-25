@@ -1,29 +1,38 @@
 package main
 
 import (
-	"os"
+	"log"
 
-	"golang.org/x/crypto/ssh/terminal"
+	"github.com/kt97679/one-ssh/ossh"
 )
 
 func main() {
 	var err error
-	useColor = terminal.IsTerminal(int(os.Stdout.Fd()))
-	settings := &OsshSettings{}
-	settings.parseCliOptions()
-	dispatcher := &(OsshDisaptcher{
-		par:            *settings.par,
-		ignoreFailures: *settings.ignoreFailures,
-		preconnect:     *settings.preconnect,
-	})
-	dispatcher.command, err = settings.getCommand()
-	abortOnError(err)
-	dispatcher.sshClientConfig, err = settings.getSSHClientConfig()
-	abortOnError(err)
-	dispatcher.hosts, err = settings.getHosts()
-	abortOnError(err)
-	err = dispatcher.validate()
-	abortOnError(err)
-	err = dispatcher.run()
-	abortOnError(err)
+	settings := &ossh.OsshSettings{}
+	settings.ParseCliOptions()
+	dispatcher := &ossh.OsshDisaptcher{
+		Par:            *settings.Par,
+		IgnoreFailures: *settings.IgnoreFailures,
+		Preconnect:     *settings.Preconnect,
+	}
+
+	if dispatcher.Command, err = settings.GetCommand(); err != nil {
+		log.Fatal(err)
+	}
+
+	if dispatcher.SSHClientConfig, err = settings.GetSSHClientConfig(); err != nil {
+		log.Fatal(err)
+	}
+
+	if dispatcher.Hosts, err = settings.GetHosts(); err != nil {
+		log.Fatal(err)
+	}
+
+	if err = dispatcher.Validate(); err != nil {
+		log.Fatal(err)
+	}
+
+	if err = dispatcher.Run(); err != nil {
+		log.Fatal(err)
+	}
 }
